@@ -1,5 +1,5 @@
 NAME = hotrace
-SRC =	main.c 
+SRC = main.c get_next_line.c get_next_line_utils.c
 
 OBJ_DIR = ./dir/
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
