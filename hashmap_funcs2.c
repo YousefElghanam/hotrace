@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:53:07 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 20:15:41 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/13 22:13:10 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,5 @@ void	*hashmap_get(t_HashMap *map, const char *key)
 			return (map->entries[i].value);
 		i = (i + 1) & map->mask;
 	}
-	return (0);
+	return (NULL);
 }

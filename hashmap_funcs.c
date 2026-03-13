@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 20:12:23 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/13 22:13:06 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ void	hashmap_destroy(t_HashMap *map)
 	i = -1;
 	while (++i < map->capacity)
 		if (map->entries[i].key)
+		{
 			free(map->entries[i].key);
+			free(map->entries[i].value);
+		}
 	free(map->entries);
 	free(map);
 }

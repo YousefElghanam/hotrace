@@ -6,7 +6,7 @@ OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
 DEPS = $(OBJ:.o=.d)
 
 CC = cc #-fsanitize=address,bounds,undefined,float-divide-by-zero
-CFLAGS = -Wall -Wextra -Werror -MMD -MP -g -O3 -flto -march=native
+CFLAGS = -Wall -Wextra -Werror -Wno-unused-result -MMD -MP -g -O3 -flto -march=native
 
 all: $(NAME)
 
@@ -19,6 +19,12 @@ $(OBJ_DIR)%.o : %.c
 
 $(OBJ_DIR):
 	mkdir -p $@
+
+run: re
+	./$(NAME)
+
+val: re
+	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) <db
 
 clean:
 	rm -rf $(OBJ) $(DEPS) $(OBJ_DIR)
