@@ -21,7 +21,7 @@ $(OBJ_DIR):
 	mkdir -p $@
 
 clean:
-	rm -rf $(OBJ) $(DEPS)
+	rm -rf $(OBJ) $(DEPS) $(OBJ_DIR)
 
 fclean: clean
 	rm -rf $(NAME) $(OBJ_DIR) minirt
