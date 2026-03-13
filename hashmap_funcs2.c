@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   hashmap_funcs2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:53:07 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 20:06:10 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/13 20:15:41 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hashmap.h"
+#include <stdint.h>
 
 t_HashEntry	*hashmap_probe(t_HashMap *map, const char *key, uint64_t hash)
 {
@@ -26,7 +27,7 @@ t_HashEntry	*hashmap_probe(t_HashMap *map, const char *key, uint64_t hash)
 	return (&map->entries[i]);
 }
 
-void	resize_init(int i, size_t newcap, t_HashEntry *new_entries,
+static void	resize_init(ssize_t i, ssize_t newcap, t_HashEntry *new_entries,
 		t_HashMap *map)
 {
 	while (++i < newcap)
@@ -44,8 +45,8 @@ void	resize_init(int i, size_t newcap, t_HashEntry *new_entries,
 // TODO Check if re-used cap variable does stupid stuff in case of errors
 int	hashmap_resize(t_HashMap *map)
 {
-	size_t		cap;
-	size_t		i;
+	ssize_t		cap;
+	ssize_t		i;
 	t_HashEntry	*new_entries;
 	t_HashEntry	*old;
 	t_HashEntry	*e;

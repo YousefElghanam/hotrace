@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:53:04 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 19:56:48 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/13 20:25:20 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ size_t	ft_strlen(const char *s)
 	size_t	n;
 
 	n = 0;
+	if (!s)
+	{
+		return (0);
+	}
 	while (s[n])
 		n++;
 	return (n);

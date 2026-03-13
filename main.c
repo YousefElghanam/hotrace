@@ -9,31 +9,24 @@
 #define E_NOSEARCH "No keys provided to search for\n"
 #define E_NOVAL "Each key needs a value on the following line\n"
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
 void	ye_perror(const char *msg)
 {
 	write(2, msg, ft_strlen(msg));
 }
 
-bool	read_db(void)
+int	read_db(void)
 {
 	char	*key = NULL;
 	char	*value = NULL;
 	while (1)
 	{
-		key = get_next_line(0);
+		key = get_next_line(STDIN_FILENO);
 		if (!key)
-			return (ye_perror(E_EMPTY_LINE), 1);
+			return (ye_perror(E_EMPTY_LINE), 0);
 		if (ft_strlen(key) == 1 && key[0] == '\n')
 			return (free(key), 0);
-		value = get_next_line(0);
+
+		value = get_next_line(STDIN_FILENO);
 		if (!value)
 			return (ye_perror(E_NOVAL), free(key), 1);
 		if (ft_strlen(value) == 1 && value[0] == '\n')

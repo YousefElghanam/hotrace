@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hashmap_funcs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 20:01:17 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/13 20:12:23 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static size_t	next_pow2(size_t v)
 	return (p);
 }
 
-static t_HashMap	*hashmap_create(size_t capacity)
+t_HashMap	*hashmap_create(size_t capacity)
 {
 	t_HashMap	*map;
 	size_t		i;
