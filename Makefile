@@ -1,5 +1,5 @@
 NAME = hotrace
-SRC = main.c hashmap_funcs.c hashmap_funcs2.c utils.c
+SRC = main.c main_utils.c hashmap_funcs.c hashmap_funcs2.c utils.c
 
 OBJ_DIR = ./dir/
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)

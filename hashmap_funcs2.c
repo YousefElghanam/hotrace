@@ -6,7 +6,7 @@
 /*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:53:07 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 12:20:08 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 17:33:10 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,8 @@ void	*hashmap_get(t_HashMap *map, const char *key)
 	while (map->entries[i].key)
 	{
 		if (map->entries[i].hash == hash)
-		{
 			if (ft_streq(map->entries[i].key, key))
 				return (map->entries[i].value);
-		}
 		i = (i + 1) & map->mask;
 	}
 	return (NULL);

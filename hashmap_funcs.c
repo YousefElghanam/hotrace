@@ -6,7 +6,7 @@
 /*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 12:20:08 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 17:34:22 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,28 @@ uint64_t	hash_string(const char *s)
 	uint64_t	h;
 
 	h = 1469598103934665603ULL;
-	while (*s)
+	while (*s && *(s + 1) && *(s + 2) && *(s + 3))
 	{
-		h ^= (unsigned char)*s++;
-		h *= 1099511628211ULL;
+		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
+		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
+		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
+		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
 	}
+	while (*s)
+		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
 	return (h);
 }
 
 static size_t	next_pow2(size_t v)
 {
-	size_t	p;
-
-	p = 1;
-	while (p < v)
-		p <<= 1;
-	return (p);
+	v--;
+	v |= v >> 1;
+	v |= v >> 2;
+	v |= v >> 4;
+	v |= v >> 8;
+	v |= v >> 16;
+	v |= v >> 32;
+	return (++v);
 }
 
 t_HashMap	*hashmap_create(size_t capacity)
