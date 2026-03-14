@@ -6,16 +6,17 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 20:05:23 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 21:07:08 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hotrace.h"
+#include <bits/time.h>
 #include <unistd.h>
+#include <time.h>
 
 static void	not_found(char *buf)
 {
-	(void)buf;
 	write(1, buf, ft_strlen(buf));
 	write(1, ": ", 2);
 	buffered_out("Not found.", 0);
@@ -105,13 +106,18 @@ int	main(void)
 	char		*buf;
 	char		*search_ptr;
 	t_HashMap	*hmap;
+	struct timespec	start;
+	struct timespec	end;
 
 	buf = malloc(1024 * 1024 * 512);
 	if (!buf)
 		return (1);
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	search_ptr = get_db(buf, 0);
 	if (!search_ptr)
 		return (free(buf), 0);
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	// printf")
 	hmap = hashmap_create(count_entries(buf) * 2);
 	fill_map(buf, hmap);
 	search_loop(search_ptr, hmap);

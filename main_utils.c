@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 18:04:23 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 19:54:28 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 20:13:00 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,12 @@ void	buffered_out(const char *s, int flush)
 	size_t			len;
 	static char		out_buf[32768];
 
-	if (flush)
+	if (s)
+		len = ft_strlen(s);
+	if (flush || pos + len + 1 >= 32768)
 	{
 		write(1, out_buf, pos);
 		pos = 0;
-		return ;
-	}
-	len = ft_strlen(s);
-	if (pos + len + 1 >= 32768)
-	{
-		write(1, out_buf, pos);
-		pos = 0;
-	}
-	if (len + 1 >= 32768)
-	{
-		write(1, s, len);
-		write(1, "\n", 1);
 		return ;
 	}
 	while (*s)
