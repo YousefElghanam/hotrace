@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 22:13:06 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 17:02:55 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,20 @@ static size_t	next_pow2(size_t v)
 	return (p);
 }
 
+#include <time.h>
+
+long	diffhm(struct timespec start, struct timespec end)
+{
+	return ((end.tv_sec - start.tv_sec) * 1000000000L
+			+ end.tv_nsec - start.tv_nsec);
+}
+
 t_HashMap	*hashmap_create(size_t capacity)
 {
 	t_HashMap	*map;
 	size_t		i;
+	struct timespec	start;
+	struct timespec	end;
 
 	map = malloc(sizeof(t_HashMap));
 	if (!map)
@@ -54,12 +64,15 @@ t_HashMap	*hashmap_create(size_t capacity)
 		return (0);
 	}
 	i = -1;
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	while (++i < capacity)
 	{
 		map->entries[i].key = 0;
 		map->entries[i].value = 0;
 		map->entries[i].hash = 0;
 	}
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	printf("looping entries took: %ld nanoseconds\n", diffhm(start, end) / 1000);
 	map->capacity = capacity;
 	map->mask = capacity - 1;
 	map->count = 0;

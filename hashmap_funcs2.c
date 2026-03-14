@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:53:07 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 01:03:03 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 14:39:59 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ t_HashEntry	*hashmap_probe(t_HashMap *map, const char *key, uint64_t hash)
 	size_t	i;
 
 	i = hash & map->mask;
+	int  x = 0;
 	while (map->entries[i].key)
 	{
+		printf("here%d\n", x++);
 		if (map->entries[i].hash == hash && ft_streq(map->entries[i].key, key))
 			return (&map->entries[i]);
 		i = (i + 1) & map->mask;

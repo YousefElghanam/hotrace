@@ -5,7 +5,7 @@ OBJ_DIR = ./dir/
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
 DEPS = $(OBJ:.o=.d)
 
-CC = cc #-fsanitize=address,bounds,undefined,float-divide-by-zero
+CC = cc -fsanitize=address,bounds,undefined,float-divide-by-zero
 CFLAGS = -Wall -Wextra -Werror -Wno-unused-result -MMD -MP -g #-O3 -flto -march=native
 
 all: $(NAME)

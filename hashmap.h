@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:58 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 20:14:26 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 14:54:51 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <stdint.h>
+# include <stdio.h>
 
 typedef struct s_hashentry
 {

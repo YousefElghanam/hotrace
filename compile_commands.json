@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "file": "main.c",
+    "arguments": [
+      "cc",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-unused-result",
+      "-MMD",
+      "-MP",
+      "-g",
+      "-c",
+      "main.c",
+      "-o",
+      "dir/main.o"
+    ],
+    "directory": "/home/jel-ghna/github/hotrace",
+    "output": "dir/main.o"
+  }
+]

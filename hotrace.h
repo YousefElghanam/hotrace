@@ -5,7 +5,7 @@
 # include "get_next_line.h"
 # include "hashmap.h"
 
-# define BUF_SIZE 4096000000
+# define BUF_SIZE 1024000000
 
 size_t		ft_strlen(const char *s);
 
