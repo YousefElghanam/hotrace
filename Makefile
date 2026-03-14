@@ -24,7 +24,13 @@ run: re
 	./$(NAME) <pairs.txt
 
 val: re
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) <pairs.txt
+	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) <test/testfile
+
+cache: re
+	valgrind --tool=cachegrind ./$(NAME) <test/testfile
+
+time: re
+	time ./$(NAME) <test/testfile
 
 clean:
 	rm -rf $(OBJ) $(DEPS) $(OBJ_DIR)

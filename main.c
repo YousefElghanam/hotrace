@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 19:24:40 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 20:05:23 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hotrace.h"
 #include <unistd.h>
+
+static void	not_found(char *buf)
+{
+	(void)buf;
+	write(1, buf, ft_strlen(buf));
+	write(1, ": ", 2);
+	buffered_out("Not found.", 0);
+}
 
 static char	*exec_search(char *buf, t_HashMap *hmap, size_t *rem_len)
 {
@@ -30,7 +38,7 @@ static char	*exec_search(char *buf, t_HashMap *hmap, size_t *rem_len)
 			if (val)
 				buffered_out(val, 0);
 			else
-				buffered_out("Not found", 0);
+				not_found(buf);
 			buf = n + 1;
 		}
 		else
