@@ -6,7 +6,7 @@
 /*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 19:21:09 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 19:24:40 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static char	*exec_search(char *buf, t_HashMap *hmap, size_t *rem_len)
 		else
 			break ;
 	}
-	*rem_len = 0;
 	if (buf && *buf)
 		while (buf[*rem_len])
 			(*rem_len)++;
@@ -49,6 +48,7 @@ static void	search_loop(char *rem, t_HashMap *hmap)
 	ssize_t	ret;
 	size_t	len;
 
+	len = 0;
 	rem = exec_search(rem, hmap, &len);
 	ft_memmove(buf, rem, len);
 	buffered_out(NULL, 1);
@@ -64,19 +64,20 @@ static void	search_loop(char *rem, t_HashMap *hmap)
 	}
 }
 
-static char	*get_db(char *buf)
+static char	*get_db(char *buf, int tot)
 {
 	ssize_t	ret;
-	int		tot;
 	int		i;
 
-	tot = 0;
 	while (1)
 	{
 		ret = read(0, buf + tot, 1048576);
 		if (ret <= 0)
 			return (NULL);
-		i = (tot > 0) ? tot - 1 : 0;
+		if (tot > 0)
+			i = tot - 1;
+		else
+			i = 0;
 		tot += ret;
 		buf[tot] = '\0';
 		while (i < tot - 1)
@@ -100,7 +101,7 @@ int	main(void)
 	buf = malloc(1024 * 1024 * 512);
 	if (!buf)
 		return (1);
-	search_ptr = get_db(buf);
+	search_ptr = get_db(buf, 0);
 	if (!search_ptr)
 		return (free(buf), 0);
 	hmap = hashmap_create(count_entries(buf) * 2);
