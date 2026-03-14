@@ -1,105 +1,104 @@
-#include "get_next_line.h"
-#include "hashmap.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/14 11:59:38 by flenski           #+#    #+#             */
+/*   Updated: 2026/03/14 12:00:33 by flenski          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "hotrace.h"
-#include <bits/time.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <sys/time.h>
-#include <time.h>
 
-#define E_EMPTY_LINE "Empty line read instead of value\n"
-#define E_NOSEARCH "No keys provided to search for\n"
-#define E_NOVAL "Each key needs a value on the following line\n"
-#define E_MALLOC "Allocation failed\n"
-
-void	ye_perror(const char *msg)
+/* Replaces the first newline with a null terminator
+	and returns pointer to next char */
+static char	*terminate_and_next(char *s)
 {
-	write(2, msg, ft_strlen(msg));
+	while (*s && *s != '\n')
+		s++;
+	if (*s == '\n')
+		*s++ = '\0';
+	return (s);
 }
 
-int	read_db(t_HashMap *hmap)
+/* Pass 1: Count database entries and find where the search queries start */
+static size_t	count_and_locate(char *buf, char **search_ptr)
 {
-	char	*key = NULL;
-	char	*value = NULL;
+	size_t	i;
+	size_t	count;
 
-	while (1)
+	i = 0;
+	count = 0;
+	while (buf[i])
 	{
-		key = get_next_line(STDIN_FILENO);
-		if (!key)
-			return (ye_perror(E_EMPTY_LINE), 1);
-		if (ft_strlen(key) == 1 && key[0] == '\n')
-			return (free(key), 0);
-
-		value = get_next_line(STDIN_FILENO);
-		if (!value)
-			return (ye_perror(E_NOVAL), free(key), 1);
-		if (ft_strlen(value) == 1 && value[0] == '\n')
-			return (ye_perror(E_NOVAL), free(key), free(value), 1);
-		key[ft_strlen(key) - 1] = 0;
-		value[ft_strlen(value) - 1] = 0;
-		// printf("inserting key %s and value %s\n", key, value);
-		if (!hashmap_set(hmap, key, value))
-			return (ye_perror(E_MALLOC), free(key), free(value), 1);
-		free(key);
+		if (buf[i] == '\n' && buf[i + 1] == '\n')
+		{
+			buf[i] = '\0';
+			*search_ptr = &buf[i + 2];
+			return (count / 2 + 1);
+		}
+		if (buf[i] == '\n')
+			count++;
+		i++;
 	}
-	return (0);
+	*search_ptr = &buf[i];
+	return (count / 2);
 }
 
-int	search_db(t_HashMap *hmap)
+/* Pass 2: Fill the map and then execute searches using the big buffer */
+static void	process_data(char *buf, char *search_ptr, t_HashMap *hmap)
 {
-	char	*key = NULL;
-	char	*value = NULL;
-	while (1)
+	char	*key;
+	char	*val;
+
+	while (buf && *buf)
 	{
-		key = get_next_line(STDIN_FILENO);
-		if (!key)
-			return (0);
-		if (ft_strlen(key) == 1 && key[0] == '\n')
-			return (free(key), 0);
-		key[ft_strlen(key) - 1] = 0;
-		value = (char *)hashmap_get(hmap, key);
-		// printf("searching for %s =>", key);
-		// fflush(stdout);
-		// write(1, "value is: ", 10);
-		write(1, value, ft_strlen(value));
-		write(1, "\n", 1);
-		// free(key);
+		key = buf;
+		buf = terminate_and_next(key);
+		val = buf;
+		buf = terminate_and_next(val);
+		hashmap_set(hmap, key, val);
 	}
-	return (0);
-}
-
-long	diff(struct timespec start, struct timespec end)
-{
-	return ((end.tv_sec - start.tv_sec) * 1000000000L
-			+ end.tv_nsec - start.tv_nsec);
+	while (search_ptr && *search_ptr)
+	{
+		key = search_ptr;
+		search_ptr = terminate_and_next(key);
+		val = (char *)hashmap_get(hmap, key);
+		if (val)
+		{
+			write(1, val, ft_strlen(val));
+			write(1, "\n", 1);
+		}
+		else
+			write(1, "Not found\n", 10);
+	}
 }
 
 int	main(void)
 {
-	t_HashMap		*hmap;
-	struct timespec	start;
-	struct timespec	end;
+	char		*buf;
+	char		*search_ptr;
+	ssize_t		total;
+	ssize_t		ret;
+	t_HashMap	*hmap;
 
-	clock_gettime(CLOCK_MONOTONIC, &start);
-	hmap = hashmap_create(1024);
-	if (!hmap)
-		return (ye_perror(E_MALLOC), 1);
-	clock_gettime(CLOCK_MONOTONIC, &end);
-	printf("hashmap_create time: %ld nanoseconds\n", diff(start, end) / 1000);
-
-	clock_gettime(CLOCK_MONOTONIC, &start);
-	if (read_db(hmap))
-		return (hashmap_destroy(hmap), 1);
-	clock_gettime(CLOCK_MONOTONIC, &end);
-	printf("read_db time: %ld nanoseconds\n", diff(start, end) / 1000);
-
-	clock_gettime(CLOCK_MONOTONIC, &start);
-	if (search_db(hmap))
-		return (hashmap_destroy(hmap), 1);
-	clock_gettime(CLOCK_MONOTONIC, &end);
-	printf("search_db time: %ld nanoseconds\n", diff(start, end) / 1000);
-	return (hashmap_destroy(hmap), 0);
+	buf = malloc(1024 * 1024 * 1024);
+	if (!buf)
+		return (1);
+	total = 0;
+	ret = read(0, buf, 1000000);
+	while (ret > 0)
+	{
+		total += ret;
+		ret = read(0, &buf[total], 1000000);
+	}
+	buf[total] = '\0';
+	hmap = hashmap_create((count_and_locate(buf, &search_ptr) * 10) / 6);
+	if (hmap)
+		process_data(buf, search_ptr, hmap);
+	hashmap_destroy(hmap);
+	free(buf);
+	return (0);
 }

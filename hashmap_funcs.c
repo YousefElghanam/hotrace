@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hashmap_funcs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/13 22:13:06 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 12:00:16 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,18 @@ t_HashMap	*hashmap_create(size_t capacity)
 
 	map = malloc(sizeof(t_HashMap));
 	if (!map)
-		return (0);
+		return (NULL);
 	capacity = next_pow2(capacity);
 	map->entries = malloc(sizeof(t_HashEntry) * capacity);
 	if (!map->entries)
+		return (free(map), NULL);
+	i = 0;
+	while (i < capacity)
 	{
-		free(map);
-		return (0);
-	}
-	i = -1;
-	while (++i < capacity)
-	{
-		map->entries[i].key = 0;
-		map->entries[i].value = 0;
+		map->entries[i].key = NULL;
+		map->entries[i].value = NULL;
 		map->entries[i].hash = 0;
+		i++;
 	}
 	map->capacity = capacity;
 	map->mask = capacity - 1;
@@ -66,42 +64,11 @@ t_HashMap	*hashmap_create(size_t capacity)
 	return (map);
 }
 
+/* map->entries[i].key and value belong to the big buffer handled in main() */
 void	hashmap_destroy(t_HashMap *map)
 {
-	size_t	i;
-
 	if (!map)
 		return ;
-	i = -1;
-	while (++i < map->capacity)
-		if (map->entries[i].key)
-		{
-			free(map->entries[i].key);
-			free(map->entries[i].value);
-		}
 	free(map->entries);
 	free(map);
-}
-
-int	hashmap_delete(t_HashMap *map, const char *key)
-{
-	uint64_t	hash;
-	size_t		i;
-
-	hash = hash_string(key);
-	i = hash & map->mask;
-	while (map->entries[i].key)
-	{
-		if (map->entries[i].hash == hash && ft_streq(map->entries[i].key, key))
-		{
-			free(map->entries[i].key);
-			map->entries[i].key = 0;
-			map->entries[i].value = 0;
-			map->entries[i].hash = 0;
-			map->count--;
-			return (1);
-		}
-		i = (i + 1) & map->mask;
-	}
-	return (0);
 }
