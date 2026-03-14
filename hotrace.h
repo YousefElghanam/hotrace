@@ -6,14 +6,13 @@
 /*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 12:02:12 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 12:20:08 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 12:42:22 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HOTRACE_H
 # define HOTRACE_H
 
-# include "get_next_line.h"
 # include "hashmap.h"
 # include <stdint.h>
 

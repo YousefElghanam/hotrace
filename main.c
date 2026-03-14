@@ -6,11 +6,13 @@
 /*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 12:00:33 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 12:42:19 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hotrace.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 /* Replaces the first newline with a null terminator
 	and returns pointer to next char */

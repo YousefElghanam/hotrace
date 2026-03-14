@@ -1,5 +1,5 @@
 NAME = hotrace
-SRC = main.c get_next_line.c get_next_line_utils.c hashmap_funcs.c hashmap_funcs2.c utils.c
+SRC = main.c hashmap_funcs.c hashmap_funcs2.c utils.c
 
 OBJ_DIR = ./dir/
 OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
@@ -30,7 +30,7 @@ clean:
 	rm -rf $(OBJ) $(DEPS) $(OBJ_DIR)
 
 fclean: clean
-	rm -rf $(NAME) $(OBJ_DIR) minirt
+	rm -rf $(NAME) $(OBJ_DIR)
 
 re: fclean all
 
