@@ -1,0 +1,4 @@
+val1024
+hashmap_create time: 50260 nanoseconds
+read_db time: 79074 nanoseconds
+search_db time: 23169 nanoseconds

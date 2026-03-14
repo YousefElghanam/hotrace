@@ -1,11 +1,14 @@
 #include "get_next_line.h"
 #include "hashmap.h"
 #include "hotrace.h"
+#include <bits/time.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <sys/time.h>
+#include <time.h>
 
 #define E_EMPTY_LINE "Empty line read instead of value\n"
 #define E_NOSEARCH "No keys provided to search for\n"
@@ -53,7 +56,7 @@ int	search_db(t_HashMap *hmap)
 	{
 		key = get_next_line(STDIN_FILENO);
 		if (!key)
-			return (ye_perror(E_EMPTY_LINE), 1);
+			return (0);
 		if (ft_strlen(key) == 1 && key[0] == '\n')
 			return (free(key), 0);
 		key[ft_strlen(key) - 1] = 0;
@@ -68,30 +71,35 @@ int	search_db(t_HashMap *hmap)
 	return (0);
 }
 
-int	main(void)
+long	diff(struct timespec start, struct timespec end)
 {
-	t_HashMap	*hmap;
-
-	hmap = hashmap_create(8192000000 / 1024);
-	if (!hmap)
-		return (ye_perror(E_MALLOC), 1);
-	if (read_db(hmap))
-		return (hashmap_destroy(hmap), 1);
-	if (search_db(hmap))
-		return (hashmap_destroy(hmap), 1);
-	return (hashmap_destroy(hmap), 0);
+	return ((end.tv_sec - start.tv_sec) * 1000000000L
+			+ end.tv_nsec - start.tv_nsec);
 }
 
-// int main(void)
-// {
-// 	char *line;
-// 	while (1)
-// 	{
-// 		line = get_next_line(0);
-// 		if (!line)
-// 			break;
-// 		printf("line is: %s", line);
-// 		free(line);
-// 	}
-// 	return (0);
-// }
+int	main(void)
+{
+	t_HashMap		*hmap;
+	struct timespec	start;
+	struct timespec	end;
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	hmap = hashmap_create(1024);
+	if (!hmap)
+		return (ye_perror(E_MALLOC), 1);
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	printf("hashmap_create time: %ld nanoseconds\n", diff(start, end) / 1000);
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	if (read_db(hmap))
+		return (hashmap_destroy(hmap), 1);
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	printf("read_db time: %ld nanoseconds\n", diff(start, end) / 1000);
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	if (search_db(hmap))
+		return (hashmap_destroy(hmap), 1);
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	printf("search_db time: %ld nanoseconds\n", diff(start, end) / 1000);
+	return (hashmap_destroy(hmap), 0);
+}
