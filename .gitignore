@@ -1,5 +1,7 @@
 .venv/
 .cache/
+.idea/
+.DS_Store
 dir/
 hotrace
 out

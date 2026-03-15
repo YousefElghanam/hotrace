@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hotrace.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/14 12:02:12 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 18:06:08 by flenski          ###   ########.fr       */
+/*   Created: 2026/03/14 12:02:12 by flink             #+#    #+#             */
+/*   Updated: 2026/03/15 19:36:30 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int			hashmap_set(t_HashMap *map, const char *key, void *value);
 void		*hashmap_get(t_HashMap *map, const char *key);
 char		*ft_strstr(char *str, char *to_find);
 char		*get_next_line(int fd);
-void		buffered_out(const char *s, int flush);
-size_t		count_entries(char *buf);
+void		buffered_out(const char *s, int flush, int nl);
+size_t		count_entries(const char *buf);
 void		fill_map(char *buf, t_HashMap *hmap);
 
 #endif /* HOTRACE_H */

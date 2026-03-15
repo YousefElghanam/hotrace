@@ -6,7 +6,7 @@ OBJ = $(SRC:%.c=$(OBJ_DIR)%.o)
 DEPS = $(OBJ:.o=.d)
 
 CC = cc #-fsanitize=address,bounds,undefined,float-divide-by-zero
-CFLAGS = -Wall -Wextra -Werror -Wno-unused-result -MMD -MP -g -O3 -flto -march=native
+CFLAGS = -Wall -Wextra -Werror -Wno-unused-result -MMD -MP -g #-O3 -flto -march=native #-funroll-loops #-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer //profiling args
 
 all: $(NAME)
 

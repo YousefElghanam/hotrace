@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   hashmap.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/13 19:52:58 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 12:20:08 by flenski          ###   ########.fr       */
+/*   Created: 2026/03/13 19:52:58 by flink             #+#    #+#             */
+/*   Updated: 2026/03/15 19:37:06 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HASHMAP_H
 # define HASHMAP_H
 
+# include <stdint.h>
 # include <stdlib.h>
 # include <string.h>
-# include <stdint.h>
 
 typedef struct s_hashentry
 {
