@@ -1,0 +1,8 @@
+Bugs to fix
+
+OPEN:
+- no newline at end of file makes last line not get processed
+- line above 2^15 (~32756) doesnt get printed
+- memory rangeperm warning in valgrind
+- Manual input bricks if two times enter after database
+	search doesnt work, ctrl+d bricked
