@@ -31,7 +31,7 @@ void		*hashmap_get(t_HashMap *map, const char *key);
 char		*ft_strstr(char *str, char *to_find);
 char		*get_next_line(int fd);
 void		buffered_out(const char *s, int flush);
-size_t		count_entries(char *buf);
+size_t		count_entries(const char *buf);
 void		fill_map(char *buf, t_HashMap *hmap);
 
 #endif /* HOTRACE_H */

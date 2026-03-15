@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 20:05:23 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 20:44:18 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ static void	search_loop(char *rem, t_HashMap *hmap)
 	}
 }
 
-static char	*get_db(char *buf, int tot)
+static char	*get_db(char *buf, ssize_t tot)
 {
 	ssize_t	ret;
-	int		i;
+	ssize_t	i;
 
 	while (1)
 	{

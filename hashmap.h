@@ -6,16 +6,16 @@
 /*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:58 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 12:20:08 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 20:42:06 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HASHMAP_H
 # define HASHMAP_H
 
+# include <stdint.h>
 # include <stdlib.h>
 # include <string.h>
-# include <stdint.h>
 
 typedef struct s_hashentry
 {

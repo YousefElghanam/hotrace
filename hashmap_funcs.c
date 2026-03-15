@@ -6,7 +6,7 @@
 /*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 17:34:22 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/14 23:41:16 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+// static inline uint64_t	load64(const char *ptr)
+// {
+// 	uint64_t	val;
+
+// 	__asm__ volatile ("movq (%1), %0" : "=r"(val) : "r"(ptr));
+// 	return (val);
+// }
+
+// TODO: Optimize, Unsigned Long and also cast earlier
 uint64_t	hash_string(const char *s)
 {
 	uint64_t	h;
@@ -31,6 +40,27 @@ uint64_t	hash_string(const char *s)
 		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
 	return (h);
 }
+
+// uint64_t	hash_string(const char *s)
+// {
+// 	uint64_t		h;
+// 	const uint64_t	prime = 1099511628211ULL;
+// 	uint64_t		block;
+
+// 	h = 1469598103934665603ULL;
+// 	while (1)
+// 	{
+// 		block = load64(s);
+// 		if ((block - 0x0101010101010101ULL) & ~block & 0x8080808080808080ULL)
+// 			break ;
+// 		h ^= block;
+// 		h *= prime;
+// 		s += 8;
+// 	}
+// 	while (*s)
+// 		h = (h ^ (unsigned char)*s++) * prime;
+// 	return (h);
+// }
 
 static size_t	next_pow2(size_t v)
 {

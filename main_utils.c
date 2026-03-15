@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 18:04:23 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 19:54:28 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/14 21:09:02 by flenski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,22 @@
 #include <unistd.h>
 
 /* Global or static buffer for writing */
-void	buffered_out(const char *s, int flush)
+void	buffered_out(const char *s, const int flush)
 {
 	static size_t	pos = 0;
 	size_t			len;
 	static char		out_buf[32768];
 
-	if (flush)
+	if (s)
+		len = ft_strlen(s);
+	else
+		len = 0;
+	if (flush || pos + len + 1 >= 32768)
 	{
 		write(1, out_buf, pos);
+		if (len + 1 >= 32768)
+			write(1, "\n", 1);
 		pos = 0;
-		return ;
-	}
-	len = ft_strlen(s);
-	if (pos + len + 1 >= 32768)
-	{
-		write(1, out_buf, pos);
-		pos = 0;
-	}
-	if (len + 1 >= 32768)
-	{
-		write(1, s, len);
-		write(1, "\n", 1);
 		return ;
 	}
 	while (*s)
@@ -44,7 +38,7 @@ void	buffered_out(const char *s, int flush)
 }
 
 /* Counts keys by counting newlines in the DB section */
-size_t	count_entries(char *buf)
+size_t	count_entries(const char *buf)
 {
 	size_t	lines;
 
@@ -58,28 +52,23 @@ size_t	count_entries(char *buf)
 	return (lines / 2);
 }
 
-static char	*terminate_and_next(char *s)
+void fill_map(char *buf, t_HashMap *hmap)
 {
-	while (*s && *s != '\n')
-		s++;
-	if (*s == '\n')
-		*s++ = '\0';
-	return (s);
-}
+	char    *key;
+	char    *val;
 
-void	fill_map(char *buf, t_HashMap *hmap)
-{
-	char	*key;
-	char	*val;
-
-	while (buf && *buf)
+	while (*buf)
 	{
 		key = buf;
-		buf = terminate_and_next(key);
-		if (!*buf)
-			break ;
+		while (*buf && *buf != '\n')
+			buf++;
+		if (*buf)
+			*buf++ = '\0';
 		val = buf;
-		buf = terminate_and_next(val);
+		while (*buf && *buf != '\n')
+			buf++;
+		if (*buf)
+			*buf++ = '\0';
 		hashmap_set(hmap, key, val);
 	}
 }
