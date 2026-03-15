@@ -6,7 +6,7 @@
 /*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/15 15:50:14 by flink            ###   ########.fr       */
+/*   Updated: 2026/03/15 16:45:37 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,35 +16,35 @@
 #include <stdlib.h>
 
 // wyhash
-static inline uint64_t mix(uint64_t a, uint64_t b)
-{
-    __uint128_t r = (__uint128_t)a * b;
-    return (uint64_t)r ^ (uint64_t)(r >> 64);
-}
+// static inline uint64_t mix(uint64_t a, uint64_t b)
+// {
+//     __uint128_t r = (__uint128_t)a * b;
+//     return (uint64_t)r ^ (uint64_t)(r >> 64);
+// }
 
-static inline uint64_t read64(const unsigned char *p)
-{
-    return *(const uint64_t*)p;
-}
+// static inline uint64_t read64(const unsigned char *p)
+// {
+//     return *(const uint64_t*)p;
+// }
 
-uint64_t hash_string(const char *s)
-{
-    const unsigned char *p = (const unsigned char*)s;
-    uint64_t seed = 0xa0761d6478bd642fULL;
+// uint64_t hash_string(const char *s)
+// {
+//     const unsigned char *p = (const unsigned char*)s;
+//     uint64_t seed = 0xa0761d6478bd642fULL;
 
-    while (p[0] && p[1] && p[2] && p[3] &&
-           p[4] && p[5] && p[6] && p[7])
-    {
-        uint64_t v = read64(p);
-        seed = mix(v ^ seed, 0xe7037ed1a0b428dbULL);
-        p += 8;
-    }
+//     while (p[0] && p[1] && p[2] && p[3] &&
+//            p[4] && p[5] && p[6] && p[7])
+//     {
+//         uint64_t v = read64(p);
+//         seed = mix(v ^ seed, 0xe7037ed1a0b428dbULL);
+//         p += 8;
+//     }
 
-    while (*p)
-        seed = mix(seed ^ *p++, 0xa0761d6478bd642fULL);
+//     while (*p)
+//         seed = mix(seed ^ *p++, 0xa0761d6478bd642fULL);
 
-    return seed;
-}
+//     return seed;
+// }
 
 //xxHash
 // static inline uint64_t	rotl(uint64_t x, int r)
@@ -76,23 +76,23 @@ uint64_t hash_string(const char *s)
 // }
 
 // FNV-1a
-// uint64_t	hash_string(const char *s)
-// {
-// 	const uint64_t	prime = 1099511628211ULL;
-// 	uint64_t		h;
+uint64_t	hash_string(const char *s)
+{
+	const uint64_t	prime = 1099511628211ULL;
+	uint64_t		h;
 
-// 	h = 1469598103934665603ULL;
-// 	while (*s && *(s + 1) && *(s + 2) && *(s + 3))
-// 	{
-// 		h = (h ^ (unsigned char)*s++) * prime;
-// 		h = (h ^ (unsigned char)*s++) * prime;
-// 		h = (h ^ (unsigned char)*s++) * prime;
-// 		h = (h ^ (unsigned char)*s++) * prime;
-// 	}
-// 	while (*s)
-// 		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
-// 	return (h);
-// }
+	h = 1469598103934665603ULL;
+	while (*s && *(s + 1) && *(s + 2) && *(s + 3))
+	{
+		h = (h ^ (unsigned char)*s++) * prime;
+		h = (h ^ (unsigned char)*s++) * prime;
+		h = (h ^ (unsigned char)*s++) * prime;
+		h = (h ^ (unsigned char)*s++) * prime;
+	}
+	while (*s)
+		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
+	return (h);
+}
 
 static size_t	next_pow2(size_t v)
 {
