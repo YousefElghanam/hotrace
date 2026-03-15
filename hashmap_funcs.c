@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hashmap_funcs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:52:50 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 23:41:16 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/15 15:50:14 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,50 +15,82 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-// static inline uint64_t	load64(const char *ptr)
-// {
-// 	uint64_t	val;
-
-// 	__asm__ volatile ("movq (%1), %0" : "=r"(val) : "r"(ptr));
-// 	return (val);
-// }
-
-// TODO: Optimize, Unsigned Long and also cast earlier
-uint64_t	hash_string(const char *s)
+// wyhash
+static inline uint64_t mix(uint64_t a, uint64_t b)
 {
-	uint64_t	h;
-
-	h = 1469598103934665603ULL;
-	while (*s && *(s + 1) && *(s + 2) && *(s + 3))
-	{
-		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
-		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
-		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
-		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
-	}
-	while (*s)
-		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
-	return (h);
+    __uint128_t r = (__uint128_t)a * b;
+    return (uint64_t)r ^ (uint64_t)(r >> 64);
 }
+
+static inline uint64_t read64(const unsigned char *p)
+{
+    return *(const uint64_t*)p;
+}
+
+uint64_t hash_string(const char *s)
+{
+    const unsigned char *p = (const unsigned char*)s;
+    uint64_t seed = 0xa0761d6478bd642fULL;
+
+    while (p[0] && p[1] && p[2] && p[3] &&
+           p[4] && p[5] && p[6] && p[7])
+    {
+        uint64_t v = read64(p);
+        seed = mix(v ^ seed, 0xe7037ed1a0b428dbULL);
+        p += 8;
+    }
+
+    while (*p)
+        seed = mix(seed ^ *p++, 0xa0761d6478bd642fULL);
+
+    return seed;
+}
+
+//xxHash
+// static inline uint64_t	rotl(uint64_t x, int r)
+// {
+// 	return (x << r) | (x >> (64 - r));
+// }
 
 // uint64_t	hash_string(const char *s)
 // {
-// 	uint64_t		h;
+// 	const unsigned char	*p = (const unsigned char *)s;
+// 	uint64_t			h;
+// 	uint64_t			v;
+
+// 	h = 0x9e3779b185ebca87ULL;
+// 	while (*p && p[1] && p[2] && p[3] && p[4] && p[5] && p[6] && p[7])
+// 	{
+// 		v = *(uint64_t *)p;
+// 		h ^= v * 0xc2b2ae3d27d4eb4fULL;
+// 		h = rotl(h, 31);
+// 		h *= 0x9e3779b185ebca87ULL;
+// 		p += 8;
+// 	}
+// 	while (*p)
+// 	{
+// 		h ^= *p++;
+// 		h *= 0x100000001b3ULL;
+// 	}
+// 	return (h);
+// }
+
+// FNV-1a
+// uint64_t	hash_string(const char *s)
+// {
 // 	const uint64_t	prime = 1099511628211ULL;
-// 	uint64_t		block;
+// 	uint64_t		h;
 
 // 	h = 1469598103934665603ULL;
-// 	while (1)
+// 	while (*s && *(s + 1) && *(s + 2) && *(s + 3))
 // 	{
-// 		block = load64(s);
-// 		if ((block - 0x0101010101010101ULL) & ~block & 0x8080808080808080ULL)
-// 			break ;
-// 		h ^= block;
-// 		h *= prime;
-// 		s += 8;
+// 		h = (h ^ (unsigned char)*s++) * prime;
+// 		h = (h ^ (unsigned char)*s++) * prime;
+// 		h = (h ^ (unsigned char)*s++) * prime;
+// 		h = (h ^ (unsigned char)*s++) * prime;
 // 	}
 // 	while (*s)
-// 		h = (h ^ (unsigned char)*s++) * prime;
+// 		h = (h ^ (unsigned char)*s++) * 1099511628211ULL;
 // 	return (h);
 // }
 
