@@ -3,22 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flink             #+#    #+#             */
-/*   Updated: 2026/03/15 21:10:04 by flink            ###   ########.fr       */
+/*   Updated: 2026/03/15 21:53:35 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hotrace.h"
 #include <stddef.h>
 #include <unistd.h>
-
-static void	not_found(char *buf)
-{
-	buffered_out(buf, 0, 0);
-	buffered_out(": Not found.", 0, 1);
-}
+#include <stdio.h>
 
 static char	*exec_search(char *buf, t_HashMap *hmap, size_t *rem_len)
 {
@@ -39,37 +34,40 @@ static char	*exec_search(char *buf, t_HashMap *hmap, size_t *rem_len)
 		if (val)
 			buffered_out(val, 0, 1);
 		else
-			not_found(buf);
+			(buffered_out(buf, 0, 0), buffered_out(": Not found.", 0, 1));
 		buf = n + 1;
 	}
 	*rem_len = ft_strlen(buf);
 	return (buf);
 }
 
-static void	search_loop(char *rem, t_HashMap *hmap)
+static int	search_loop(char *rem, t_HashMap *hmap)
 {
-	char	buf[16384];
+	char	*buf;
 	ssize_t	ret;
 	size_t	len;
 
 	len = 0;
 	if (*rem == '\n')
-		return ;
+		return (1);
+	buf = malloc(4294967296);
+	if (!buf)
+		return (write(2, "too big :(\n", 11), 1);
 	rem = exec_search(rem, hmap, &len);
 	ft_memmove(buf, rem, len);
 	buffered_out(NULL, 1, 0);
 	while (1)
 	{
-		ret = read(0, buf + len, 16383 - len);
-		if (ret <= 0)
+		ret = read(0, buf + len, 4294967295 - len);
+		if (ret <= 0 || ret >= 4294967294
+			|| *(buf + len) == '\n' || *buf == '\n')
 			break ;
-		if (*(buf + len) == '\n' || *buf == '\n')
-			return ;
 		buf[len + ret] = '\0';
 		rem = exec_search(buf, hmap, &len);
 		ft_memmove(buf, rem, len);
 		buffered_out(NULL, 1, 0);
 	}
+	return (0);
 }
 
 static char	*get_db(char *buf, ssize_t tot)
@@ -79,9 +77,9 @@ static char	*get_db(char *buf, ssize_t tot)
 
 	while (1)
 	{
-		ret = read(0, buf + tot, 1048576);
-		if (ret <= 0 || (tot == 0 && *(buf + tot) == '\n'))
-			return (NULL);
+		ret = read(0, buf + tot, 4294967296);
+		if (ret <= 0 || (tot == 0 && *(buf + tot) == '\n') || ret >= 4294967294)
+			return (write(2, "too big :(\n", 11), NULL);
 		if (tot > 0)
 			i = tot - 1;
 		else
@@ -107,7 +105,7 @@ int	main(void)
 	t_HashMap	*hmap;
 	size_t		lines;
 
-	buf = malloc(1024 * 1024 * 512);
+	buf = malloc(4294967296);
 	if (!buf)
 		return (1);
 	search_ptr = get_db(buf, 0);
