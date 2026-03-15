@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flink             #+#    #+#             */
-/*   Updated: 2026/03/15 20:29:59 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/15 21:10:04 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hotrace.h"
-#include <bits/time.h>
+#include <stddef.h>
 #include <unistd.h>
-#include <time.h>
-#include <stdio.h>
 
 static void	not_found(char *buf)
 {
@@ -35,7 +33,7 @@ static char	*exec_search(char *buf, t_HashMap *hmap, size_t *rem_len)
 		while (*n && *n != '\n')
 			n++;
 		if (*n != '\n')
-			break ; // incomplete line
+			break ;
 		*n = '\0';
 		val = (char *)hashmap_get(hmap, buf);
 		if (val)
@@ -63,21 +61,16 @@ static void	search_loop(char *rem, t_HashMap *hmap)
 	while (1)
 	{
 		ret = read(0, buf + len, 16383 - len);
-		// printf("len is :%lu\n", ret);
 		if (ret <= 0)
 			break ;
 		if (*(buf + len) == '\n' || *buf == '\n')
-		{
-			// printf("heerre\n");
 			return ;
-		}
 		buf[len + ret] = '\0';
 		rem = exec_search(buf, hmap, &len);
 		ft_memmove(buf, rem, len);
 		buffered_out(NULL, 1, 0);
 	}
 }
-
 
 static char	*get_db(char *buf, ssize_t tot)
 {
@@ -87,7 +80,7 @@ static char	*get_db(char *buf, ssize_t tot)
 	while (1)
 	{
 		ret = read(0, buf + tot, 1048576);
-		if (ret <= 0)
+		if (ret <= 0 || (tot == 0 && *(buf + tot) == '\n'))
 			return (NULL);
 		if (tot > 0)
 			i = tot - 1;
@@ -95,14 +88,10 @@ static char	*get_db(char *buf, ssize_t tot)
 			i = 0;
 		tot += ret;
 		buf[tot] = '\0';
-		// printf("buf is :(%s)", buf);
-		// fflush(stdout);
 		while (i < tot - 1)
 		{
 			if (buf[i] == '\n' && buf[i + 1] == '\n')
 			{
-				// if (buf[i + 2] == '\n')
-				// 	return (write(2, "extra empty line\n", 17), NULL);
 				buf[i] = '\0';
 				return (buf + i + 2);
 			}
@@ -116,21 +105,21 @@ int	main(void)
 	char		*buf;
 	char		*search_ptr;
 	t_HashMap	*hmap;
-	struct timespec	start;
-	struct timespec	end;
+	size_t		lines;
 
 	buf = malloc(1024 * 1024 * 512);
 	if (!buf)
 		return (1);
-	clock_gettime(CLOCK_MONOTONIC, &start);
 	search_ptr = get_db(buf, 0);
 	if (!search_ptr)
 		return (free(buf), 0);
-	clock_gettime(CLOCK_MONOTONIC, &end);
-	// printf")
-	hmap = hashmap_create(count_entries(buf) * 2);
-	// printf("buf: (%s)\n", buf);
-	// printf("hmap: (%s)\n", buf);
+	lines = count_entries(buf);
+	if (lines == 0)
+	{
+		free(buf);
+		return (1);
+	}
+	hmap = hashmap_create(lines * 2);
 	fill_map(buf, hmap);
 	search_loop(search_ptr, hmap);
 	hashmap_destroy(hmap);

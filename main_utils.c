@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 18:04:23 by flink             #+#    #+#             */
-/*   Updated: 2026/03/15 19:45:02 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2026/03/15 21:09:56 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ size_t	count_entries(const char *buf)
 			lines++;
 		buf++;
 	}
+	if (lines == 1)
+		return (lines);
 	return (lines / 2);
 }
 
@@ -78,12 +80,12 @@ void	fill_map(char *buf, t_HashMap *hmap)
 		key = buf;
 		while (*buf && *buf != '\n')
 			buf++;
-		if (*buf)
+		if (*buf && *buf != '\0')
 			*buf++ = '\0';
 		val = buf;
 		while (*buf && *buf != '\n')
 			buf++;
-		if (*buf)
+		if (*buf && *buf != '\0')
 			*buf++ = '\0';
 		hashmap_set(hmap, key, val);
 	}

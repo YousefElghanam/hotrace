@@ -6,18 +6,19 @@
 /*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 19:53:07 by flink             #+#    #+#             */
-/*   Updated: 2026/03/15 19:39:33 by flink            ###   ########.fr       */
+/*   Updated: 2026/03/15 21:07:53 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hashmap.h"
-#include <stdint.h>
 
 t_HashEntry	*hashmap_probe(t_HashMap *map, const char *key, uint64_t hash)
 {
-	size_t	i;
+	size_t		i;
+	t_HashEntry	*x;
 
 	i = hash & map->mask;
+	x = map->entries;
 	while (map->entries[i].key)
 	{
 		if (map->entries[i].hash == hash && ft_streq(map->entries[i].key, key))
