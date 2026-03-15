@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 11:59:38 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 20:44:18 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/15 16:35:14 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,33 @@
 
 static void	not_found(char *buf)
 {
-	(void)buf;
-	write(1, buf, ft_strlen(buf));
-	write(1, ": ", 2);
-	buffered_out("Not found.", 0);
+	buffered_out(buf, 0, 0);
+	buffered_out(": Not found.", 0, 1);
 }
 
 static char	*exec_search(char *buf, t_HashMap *hmap, size_t *rem_len)
 {
 	char	*val;
 	char	*n;
+	char	*start;
 
-	while (buf && *buf)
+	start = buf;
+	while (*buf)
 	{
 		n = buf;
 		while (*n && *n != '\n')
 			n++;
-		if (*n == '\n')
-		{
-			*n = '\0';
-			val = (char *)hashmap_get(hmap, buf);
-			if (val)
-				buffered_out(val, 0);
-			else
-				not_found(buf);
-			buf = n + 1;
-		}
+		if (*n != '\n')
+			break ; // incomplete line
+		*n = '\0';
+		val = (char *)hashmap_get(hmap, buf);
+		if (val)
+			buffered_out(val, 0, 1);
 		else
-			break ;
+			not_found(buf);
+		buf = n + 1;
 	}
-	if (buf && *buf)
-		while (buf[*rem_len])
-			(*rem_len)++;
+	*rem_len = ft_strlen(buf);
 	return (buf);
 }
 
@@ -59,7 +54,7 @@ static void	search_loop(char *rem, t_HashMap *hmap)
 	len = 0;
 	rem = exec_search(rem, hmap, &len);
 	ft_memmove(buf, rem, len);
-	buffered_out(NULL, 1);
+	buffered_out(NULL, 1, 0);
 	while (1)
 	{
 		ret = read(0, buf + len, 16383 - len);
@@ -68,7 +63,7 @@ static void	search_loop(char *rem, t_HashMap *hmap)
 		buf[len + ret] = '\0';
 		rem = exec_search(buf, hmap, &len);
 		ft_memmove(buf, rem, len);
-		buffered_out(NULL, 1);
+		buffered_out(NULL, 1, 0);
 	}
 }
 

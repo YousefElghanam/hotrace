@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flenski <flenski@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flink <flink@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 18:04:23 by flenski           #+#    #+#             */
-/*   Updated: 2026/03/14 21:09:02 by flenski          ###   ########.fr       */
+/*   Updated: 2026/03/15 16:33:09 by flink            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 /* Global or static buffer for writing */
-void	buffered_out(const char *s, const int flush)
+void	buffered_out(const char *s, const int flush, int nl)
 {
 	static size_t	pos = 0;
 	size_t			len;
@@ -34,7 +34,8 @@ void	buffered_out(const char *s, const int flush)
 	}
 	while (*s)
 		out_buf[pos++] = *s++;
-	out_buf[pos++] = '\n';
+	if (nl == 1)
+		out_buf[pos++] = '\n';
 }
 
 /* Counts keys by counting newlines in the DB section */
