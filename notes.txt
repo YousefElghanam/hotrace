@@ -6,3 +6,5 @@ OPEN:
 - memory rangeperm warning in valgrind
 - Manual input bricks if two times enter after database
 	search doesnt work, ctrl+d bricked
+- Make sure ctrl+D stops at any point of the prog
+- inputting 
